@@ -12,6 +12,10 @@ public class LoadText : MonoBehaviour
 
     void Start()
     {
+        // StartCoroutine (textLoad());
+    }
+
+    public void click() {
         StartCoroutine (textLoad());
     }
 
