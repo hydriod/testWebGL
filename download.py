@@ -114,5 +114,5 @@ if __name__ == '__main__':
     os.makedirs(SEARCH_PATH, exist_ok=True)
     os.makedirs(SUBJECT_PATH, exist_ok=True)
 
-    # search_download()
+    search_download()
     view_download()
