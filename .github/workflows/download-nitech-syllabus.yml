@@ -20,7 +20,6 @@ jobs:
         run: pip install requests
       - name: download
         run: |
-          cd WebGL_Build_on_GitHub
           python download.py -d
       - name: git config
         run: |
