@@ -7,7 +7,7 @@ from pprint import pprint
 
 
 URL = 'https://syllabus.ict.nitech.ac.jp/search.php'
-SEARCH_PATH = 'Assets/syllabus.ict.nitech.ac.jp/search'
+SEARCH_PATH = 'docs/StreamingAssets/search'
 SUBJECT_PATH = 'docs/StreamingAssets/download'
 
 
@@ -52,7 +52,7 @@ def search_download():
             os.path.join(SEARCH_PATH, f'page_{i}.php'),
             {'page': str(i)}
         )
-        if(is_debug and 3 < i):
+        if(is_debug and 100 < i):
             break
 
 
