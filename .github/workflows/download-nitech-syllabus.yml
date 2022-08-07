@@ -1,38 +1,29 @@
 name: download nitech syllabus
+
 on:
-    workflow_dispatch:
+  workflow_dispatch:
+
 jobs:
-    download-syllabus:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v3
-              with:
-                  repository: hydriod/Nitech_Mirror_syllabus
-                  path: Nitech_Mirror_syllabus
-            - uses: actions/checkout@v3
-              with:
-                  path: testWebGL
-
-            - name: setup python
-              uses: actions/setup-python@v4
-              with:
-                  python-version: "3.10"
-            - name: requests install
-              run: pip install requests
-
-            - name: download
-              run: |
-                  cd testWebGL
-                  python ../Nitech_Mirror_syllabus/download.py -d
-
-            - name: git config
-              run: |
-                  git config --global user.email github-actions
-                  git config --global user.name 41898282+github-actions[bot]@users.noreply.github.com
-            - name: push
-              run: |
-                  pwd
-                  cd testWebGL
-                  git add .
-                  git commit -m "github actions"
-                  git push origin main
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v3
+    - name: setup python
+      uses: actions/setup-python@v4
+      with: 
+        python-version: "3.10"
+    - name: requests install
+      run: pip install requests
+    -name: download
+      run: |
+        cd WebGL_Build_on_GitHub
+        python download.py -d
+    - name: git config
+      run: |
+        git config --global user.name GitHub Action
+        git config --global user.email action@github.com
+    - name: push
+      run: |
+        cd WebGL_Build_on_GitHub
+        git add .
+        git commit -m "github actions"
+        git push origin main
