@@ -25,7 +25,6 @@ jobs:
           git config --global user.email action@github.com
       - name: push
         run: |
-          cd WebGL_Build_on_GitHub
           git add .
           git commit -m "github actions"
           git push origin main
