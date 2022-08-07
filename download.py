@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 import argparse
 import requests
 import os
@@ -8,7 +7,8 @@ from pprint import pprint
 
 
 URL = 'https://syllabus.ict.nitech.ac.jp/search.php'
-SEARCH_PATH = 'docs/StreamingAssets/download'
+SEARCH_PATH = 'Assets/syllabus.ict.nitech.ac.jp/search'
+SUBJECT_PATH = 'Assets/syllabus.ict.nitech.ac.jp/view'
 
 
 def wget(URL: str, savePath: str, postData: dict = None):
@@ -112,6 +112,7 @@ if __name__ == '__main__':
     is_debug = args.debug
 
     os.makedirs(SEARCH_PATH, exist_ok=True)
+    os.makedirs(SUBJECT_PATH, exist_ok=True)
 
     search_download()
     view_download()
