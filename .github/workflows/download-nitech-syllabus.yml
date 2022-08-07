@@ -4,26 +4,27 @@ on:
   workflow_dispatch:
 
 jobs:
-  runs-on: ubuntu-latest
-  steps:
-    - uses: actions/checkout@v3
-    - name: setup python
-      uses: actions/setup-python@v4
-      with: 
-        python-version: "3.10"
-    - name: requests install
-      run: pip install requests
-    -name: download
-      run: |
-        cd WebGL_Build_on_GitHub
-        python download.py -d
-    - name: git config
-      run: |
-        git config --global user.name GitHub Action
-        git config --global user.email action@github.com
-    - name: push
-      run: |
-        cd WebGL_Build_on_GitHub
-        git add .
-        git commit -m "github actions"
-        git push origin main
+  download-syllabus:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: setup python
+        uses: actions/setup-python@v4
+        with: 
+          python-version: "3.10"
+      - name: requests install
+        run: pip install requests
+      - name: download
+        run: |
+          cd WebGL_Build_on_GitHub
+          python download.py -d
+      - name: git config
+        run: |
+          git config --global user.name GitHub Action
+          git config --global user.email action@github.com
+      - name: push
+        run: |
+          cd WebGL_Build_on_GitHub
+          git add .
+          git commit -m "github actions"
+          git push origin main
