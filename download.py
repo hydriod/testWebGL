@@ -8,6 +8,7 @@ from pprint import pprint
 
 
 URL = 'https://syllabus.ict.nitech.ac.jp/search.php'
+SEARCH_PATH = 'Assets/syllabus.ict.nitech.ac.jp/search'
 STREAMINGASSETS_PATH = 'docs/StreamingAssets/download'
 
 
