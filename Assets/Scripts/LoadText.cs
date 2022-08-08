@@ -18,8 +18,8 @@ public class LoadText : MonoBehaviour
     }
 
     public void click() {
-        StartCoroutine (textLoad());
-        // debugText.text = "hello";
+        //StartCoroutine (textLoad());
+        debugText.text = "hello";
     }
 
     
