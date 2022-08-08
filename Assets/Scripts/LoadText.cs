@@ -18,11 +18,11 @@ public class LoadText : MonoBehaviour
     }
 
     public void click() {
-        // StartCoroutine (textLoad());
-        debugText.text = "hello";
+        StartCoroutine (textLoad());
+        // debugText.text = "hello";
     }
 
-    /*
+    
     IEnumerator textLoad() 
     { 
         DirectoryInfo dir = new DirectoryInfo(Application.streamingAssetsPath + "/download/");
@@ -66,6 +66,7 @@ public class LoadText : MonoBehaviour
                 Debug.Log(i + "：" + m.Groups[2].Value);
                 i++;
             }
+            */
             
             Debug.Log(mc[1].Groups[2].Value.Split("&nbsp;"));
             Debug.Log(mc[1].Groups[2].Value.Split("&nbsp;")[2]);
@@ -74,5 +75,5 @@ public class LoadText : MonoBehaviour
         
         debugText.text = tmp;
     }
-    */
+    
 }
