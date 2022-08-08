@@ -10,6 +10,8 @@ public class LoadText : MonoBehaviour
     private TextMeshProUGUI debugText;
     private string result;
 
+    private string tmp;
+
     void Start()
     {
         // StartCoroutine (textLoad());
@@ -21,15 +23,53 @@ public class LoadText : MonoBehaviour
 
     IEnumerator textLoad() 
     { 
-        string filepath = Application.streamingAssetsPath + "/test.txt";
-        if (filepath.Contains ("://") || filepath.Contains (":///"))
+        DirectoryInfo dir = new DirectoryInfo(Application.streamingAssetsPath + "/download/");
+        FileInfo[] info = dir.GetFiles("*.php");
+        foreach(FileInfo f in info)
         {
-            WWW www = new WWW (filepath);
-            yield return www;
-            result = www.text;
-        } else {
-            result = File.ReadAllText (filepath);
+            Debug.Log(f.Name);
+
+            string filepath = Application.streamingAssetsPath + "/download/" + f.Name;
+            Debug.Log(filepath);
+            if (filepath.Contains ("://") || filepath.Contains (":///"))
+            {
+                WWW www = new WWW (filepath);
+                yield return www;
+                result = www.text;
+            } else {
+                result = File.ReadAllText (filepath);
+            }
+
+            //正規表現パターンとオプションを指定してRegexオブジェクトを作成
+            System.Text.RegularExpressions.Regex r =
+                new System.Text.RegularExpressions.Regex(
+                    @"<(div)\b[^>]*>(.*?)</\1>",
+                    System.Text.RegularExpressions.RegexOptions.IgnoreCase
+                    | System.Text.RegularExpressions.RegexOptions.Singleline);
+            //TextBox1.Text内で正規表現と一致する対象をすべて検索
+            System.Text.RegularExpressions.MatchCollection mc = r.Matches(result);
+
+            // result = "";
+            int i = 0;
+            /*
+            foreach (System.Text.RegularExpressions.Match m in mc){
+                //正規表現に一致したグループと位置を表示
+                // result += ("タグ:" + m.Groups[1].Value+
+                //     "\nタグ内の文字列:" + m.Groups[2].Value + 
+                //     "\nタグの位置:" + m.Groups[1].Index);
+                // Debug.Log("タグ:" + m.Groups[1].Value+
+                //     "\nタグ内の文字列:" + m.Groups[2].Value + 
+                //     "\nタグの位置:" + m.Groups[1].Index);
+                result += i + "：" + m.Groups[2].Value + "\n";
+                Debug.Log(i + "：" + m.Groups[2].Value);
+                i++;
+            }
+            */
+            Debug.Log(mc[1].Groups[2].Value.Split("&nbsp;"));
+            Debug.Log(mc[1].Groups[2].Value.Split("&nbsp;")[2]);
+            tmp += mc[1].Groups[2].Value.Split("&nbsp;")[2].Split("<br>")[0] + "/";
         }
-        debugText.text = result;
+        
+        debugText.text = tmp;
     }
 }
