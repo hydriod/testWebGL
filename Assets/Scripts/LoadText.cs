@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System.IO;
+using UnityEngine.Networking;
+using System.Text;
 
 public class LoadText : MonoBehaviour
 {
@@ -17,29 +19,53 @@ public class LoadText : MonoBehaviour
         // StartCoroutine (textLoad());
     }
 
-    public void click() {
-        //StartCoroutine (textLoad());
-        debugText.text = "hello";
+    public void click()
+    {
+        StartCoroutine(textLoad());
+        //debugText.text = "hello";
     }
 
-    
-    IEnumerator textLoad() 
-    { 
-        DirectoryInfo dir = new DirectoryInfo(Application.streamingAssetsPath + "/download/");
-        FileInfo[] info = dir.GetFiles("*.php");
-        foreach(FileInfo f in info)
-        {
-            Debug.Log(f.Name);
 
-            string filepath = Application.streamingAssetsPath + "/download/" + f.Name;
+    IEnumerator textLoad()
+    {
+        string url = Application.streamingAssetsPath + "/download/";
+#if UNITY_EDITOR
+        DirectoryInfo dir = new DirectoryInfo(url);
+        FileInfo[] info = dir.GetFiles("*.php");
+        string[] fName = new string[info.Length];
+        for (int i = 0; i < info.Length; i++)
+        {
+            fName[i] = info[i].Name;
+        }
+#else
+        UnityWebRequest request = UnityWebRequest.Get(url + "list.txt");
+        yield return request.SendWebRequest();
+        if (request.result == UnityWebRequest.Result.ConnectionError)
+        {
+            // エラー処理
+            debugText.text = "Error";
+            yield break;
+        }
+        string content = request.downloadHandler.text;
+        string[] fName = content.Split(System.Environment.NewLine);
+#endif
+
+        StringBuilder text = new StringBuilder();
+        foreach (string f in fName)
+        {
+            Debug.Log(f);
+
+            string filepath = Application.streamingAssetsPath + "/download/" + f;
             Debug.Log(filepath);
-            if (filepath.Contains ("://") || filepath.Contains (":///"))
+            if (filepath.Contains("://") || filepath.Contains(":///"))
             {
-                WWW www = new WWW (filepath);
+                WWW www = new WWW(filepath);
                 yield return www;
                 result = www.text;
-            } else {
-                result = File.ReadAllText (filepath);
+            }
+            else
+            {
+                result = File.ReadAllText(filepath);
             }
 
             //正規表現パターンとオプションを指定してRegexオブジェクトを作成
@@ -67,13 +93,16 @@ public class LoadText : MonoBehaviour
                 i++;
             }
             */
-            
+
             Debug.Log(mc[1].Groups[2].Value.Split("&nbsp;"));
             Debug.Log(mc[1].Groups[2].Value.Split("&nbsp;")[2]);
-            tmp += mc[1].Groups[2].Value.Split("&nbsp;")[2].Split("<br>")[0] + "/";
+            //tmp += mc[1].Groups[2].Value.Split("&nbsp;")[2].Split("<br>")[0] + "/";
+            text.Append(mc[1].Groups[2].Value.Split("&nbsp;")[2].Split("<br>")[0]);
+            text.Append("/");
+            debugText.text = text.ToString();
         }
-        
-        debugText.text = tmp;
+
+        //debugText.text = tmp;
     }
-    
+
 }
