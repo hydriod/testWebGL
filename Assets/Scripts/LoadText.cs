@@ -57,6 +57,7 @@ public class LoadText : MonoBehaviour
 
             string filepath = Application.streamingAssetsPath + "/download/" + f;
             Debug.Log(filepath);
+            text.Append(filepath);
             if (filepath.Contains("://") || filepath.Contains(":///"))
             {
                 WWW www = new WWW(filepath);
@@ -100,6 +101,7 @@ public class LoadText : MonoBehaviour
             text.Append(mc[1].Groups[2].Value.Split("&nbsp;")[2].Split("<br>")[0]);
             text.Append("/");
             debugText.text = text.ToString();
+            yield return new WaitForSeconds(0.1f);
         }
 
         //debugText.text = tmp;
