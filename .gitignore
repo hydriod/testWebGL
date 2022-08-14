@@ -59,5 +59,4 @@ crashlytics-build.properties
 
 
 /Assets/StreamingAssets/download
-Syllabus.xml
-TimeTable.xml
+/Assets/StreamingAssets/xml
