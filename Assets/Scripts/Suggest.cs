@@ -36,43 +36,14 @@ namespace Suggest
 
     }
 
-    public class Subject
-    {
-        /// <summary>
-        /// ファイル番号
-        /// </summary>
-        public int id { get; set; }
-        /// <summary>
-        /// 科目名前
-        /// </summary>
-        public string name { get; set; }
-        /// <summary>
-        /// 時間割番号
-        /// </summary>
-        public int timeTableId { get; set; }
-        /// <summary>
-        /// 担当教員
-        /// </summary>
-        public string teacher { get; set; }
-        public string[] department { get; set; }
-        public int grade { get; set; }
-        /// <summary>
-        /// 科目区分
-        /// </summary>
-        public int creditsNumber { get; set; }
-
-        public override string ToString()
-        {
-            return this.name;
-        }
-    }
-
     public class Suggest : MonoBehaviour
     {
         public string department;
         public int grade;
-        public List<Subject>[][][] suggestTimeTable;
-        public Subject[][][] gradeTimeTable;
+        public List<int>[][][] suggestTimeTable;
+        public int?[][][] gradeTimeTable;
+
+        public Dictionary<int, Subject> Subjects { get; set; }
 
         public const int Japanese = 0;
         public const int English = 1;
@@ -83,44 +54,47 @@ namespace Suggest
         private void Awake()
         {
             // リスト初期化
-            suggestTimeTable = new List<Subject>[HALF][][];
+            suggestTimeTable = new List<int>[HALF][][];
             for (int i = 0; i < HALF; i++)
             {
-                suggestTimeTable[i] = new List<Subject>[DAY][];
+                suggestTimeTable[i] = new List<int>[DAY][];
                 for (int j = 0; j < DAY; j++)
                 {
-                    suggestTimeTable[i][j] = new List<Subject>[TIME];
+                    suggestTimeTable[i][j] = new List<int>[TIME];
                     for (int k = 0; k < TIME; k++)
                     {
-                        suggestTimeTable[i][j][k] = new List<Subject>();
+                        suggestTimeTable[i][j][k] = new List<int>();
                     }
                 }
             }
 
             // 学年時間割の初期化
-            Subject empty = new Subject();
-            gradeTimeTable = new Subject[HALF][][];
+            int? empty = null;
+            gradeTimeTable = new int?[HALF][][];
             for (int i = 0; i < HALF; i++)
             {
-                gradeTimeTable[i] = new Subject[DAY][];
+                gradeTimeTable[i] = new int?[DAY][];
                 for (int j = 0; j < DAY; j++)
                 {
-                    gradeTimeTable[i][j] = new Subject[TIME];
+                    gradeTimeTable[i][j] = new int?[TIME];
                     for (int k = 0; k < TIME; k++)
                     {
                         gradeTimeTable[i][j][k] = empty;
                     }
                 }
             }
+
+            // 科目辞書の初期化
+            Subjects = new Dictionary<int, Subject>();
         }
 
         public void printTimeTable()
         {
             StringBuilder gTableLog = new StringBuilder();
-            foreach (Subject[] row in gradeTimeTable[0])
+            foreach (int?[] row in gradeTimeTable[0])
             {
                 gTableLog.Append("[");
-                foreach (Subject e in row)
+                foreach (int? e in row)
                 {
                     gTableLog.Append(e);
                     gTableLog.Append(", ");
@@ -130,10 +104,10 @@ namespace Suggest
             Debug.Log(gTableLog.ToString());
 
             StringBuilder sTableLog = new StringBuilder();
-            foreach (List<Subject>[] row in suggestTimeTable[0])
+            foreach (List<int>[] row in suggestTimeTable[0])
             {
                 sTableLog.Append("[");
-                foreach (List<Subject> e in row)
+                foreach (List<int> e in row)
                 {
                     sTableLog.Append("(");
                     sTableLog.Append(string.Join(", ", e));
@@ -153,11 +127,12 @@ namespace Suggest
 
         IEnumerator suggest(string department, int grade)
         {
+            //string[] fileNames = new string[] { "69245.php", "69129.php" };
             // phpのリストをロード
             string[] fileNames = new string[0];
-            yield return StartCoroutine(LoadSyllabus((result) => fileNames = result));
+            yield return StartCoroutine(LoadSyllabusList((result) => fileNames = result));
 
-            // 
+            // 時間割に追加
             yield return StartCoroutine(AddList(fileNames, department, grade));
 
             Debug.LogWarning("end");
@@ -165,7 +140,12 @@ namespace Suggest
             yield break;
         }
 
-        IEnumerator LoadSyllabus(UnityEngine.Events.UnityAction<string[]> callback)
+        /// <summary>
+        /// phpファイル名の配列をロード
+        /// </summary>
+        /// <param name="callback">結果を返すためのコールバック</param>
+        /// <returns></returns>
+        IEnumerator LoadSyllabusList(UnityEngine.Events.UnityAction<string[]> callback)
         {
             string url = Application.streamingAssetsPath + "/download/";
 #if UNITY_EDITOR
@@ -218,6 +198,7 @@ namespace Suggest
 
                 // 科目のデータを抽出
                 Subject subject = ExtractSubject(f, mc);
+                Subjects.Add(subject.id, subject);
 
                 // 時間割の位置を抽出
                 int half, day, startTime, endTime;
@@ -236,20 +217,19 @@ namespace Suggest
                         departmentFlag = true;
                     }
                 }
+
                 if (grade == subject.grade && departmentFlag)
                 {
                     for (int i = startTime - 1; i < endTime; i++)
                     {
-                        gradeTimeTable[half][day][i] = subject;
+                        gradeTimeTable[half][day][i] = subject.id;
                     }
 
                 }
-                else
+
+                for (int i = startTime - 1; i < endTime; i++)
                 {
-                    for (int i = startTime - 1; i < endTime; i++)
-                    {
-                        suggestTimeTable[half][day][i].Add(subject);
-                    }
+                    suggestTimeTable[half][day][i].Add(subject.id);
                 }
 
                 yield return null;
@@ -263,6 +243,7 @@ namespace Suggest
             fileContent = File.ReadAllText(filePath);
 
 #else
+            // ダウンロード
             UnityWebRequest request = new UnityWebRequest(filePath);
             yield return request.SendWebRequest();
             if (request.result == UnityWebRequest.Result.ConnectionError)
@@ -271,6 +252,7 @@ namespace Suggest
                 Debug.Log(request.error);
                 yield break;
             }
+            //　ロード
             fileContent = request.downloadHandler.text;
 
 #endif
@@ -295,23 +277,25 @@ namespace Suggest
             subject.teacher = matchCollection[5].Groups[2].Value.Replace("&nbsp;", "");
             subject.timeTableId = int.Parse(matchCollection[3].Groups[2].Value);
 
-            string departmentGrade = matchCollection[9].Groups[2].Value.Replace("&nbsp;", "");
-            //subject.grade = int.Parse(departmentGrade.Split(" ")[1][0].ToString());
+            // 学科と学年を抽出
+            string departmentGrade = matchCollection[9].Groups[2].Value.Replace("&nbsp;", "").Replace("&nbsp", "");
             Regex r = new Regex(@"(.+?)(\d)年次");
             Match match = r.Match(departmentGrade);
-            subject.department = match.Groups[0].Value.Split("<BR> ");
+            subject.department = match.Groups[1].Value.Replace("<br>", "").Split("<BR> ");
             Debug.Log(match.Groups.Count);
             Debug.Log(string.Join(", ", match.Groups));
             subject.grade = int.Parse(match.Groups[2].Value);
-
+            // 単位数を抽出
             subject.creditsNumber = int.Parse(matchCollection[13].Groups[2].Value);
 
+            // ログに出力
             StringBuilder log = new StringBuilder();
             log.Append("name:").Append(subject.name).Append("\n");
             log.Append("teacher:").Append(subject.teacher).Append("\n");
             log.Append("creditsNum:").Append(subject.creditsNumber).Append("\n");
             log.Append("timeTableId:").Append(subject.timeTableId).Append("\n");
             log.Append("id:").Append(subject.id).Append("\n");
+            log.Append("department:[").Append(string.Join(", ", subject.department)).Append("]\n");
             Debug.Log(log.ToString());
 
             return subject;
