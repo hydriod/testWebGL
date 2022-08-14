@@ -16,11 +16,14 @@ namespace Suggest
 
         static class MatchIndex
         {
+            // 科目名の言語
             public const int Japanese = 0;
             public const int English = 1;
 
+            // phpのdivの中身
             public const int DIV_CONTENT = 2;
 
+            // divの番号
             public const int SUBJECT_NAME = 1;
             public const int TIMETABLE_ID = 3;
             public const int SUBJECT_TEACHER = 5;
@@ -28,7 +31,11 @@ namespace Suggest
             public const int CREDITS_NUMBER = 13;
             public const int TIMETABLE = 15;
 
-
+            // 時間割のマッチ
+            public const int TERM = 1;
+            public const int DAY = 2;
+            public const int START_TIME = 5;
+            public const int END_TIME = 6;
         }
 
         private void Awake()
@@ -236,32 +243,33 @@ namespace Suggest
         {
             string timeTablePosition = matchCollection[MatchIndex.TIMETABLE].Groups[MatchIndex.DIV_CONTENT].Value.Replace("&nbsp;", "");
 
+            Regex r = new Regex(@"(\S+) (.曜|集中)((\d)-(\d)限)?");
+            Match match = r.Match(timeTablePosition);
+
             // 前期後期
-            int half = Term.ToTerm(timeTablePosition[0].ToString());
+            int half = Term.ToTerm(match.Groups[MatchIndex.TERM].Value);
             if (half == Term.Other)
             {
-                Debug.LogError($"{timeTablePosition}[0] = {timeTablePosition[0]}");
+                Debug.LogError($"{match.Value}[1] = {match.Groups[MatchIndex.TERM].Value}");
             }
             // 曜日
-            int day = Day.ToDay(timeTablePosition[3].ToString());
+            int day = Day.ToDay(match.Groups[MatchIndex.DAY].Value);
             if (day == Day.Other)
             {
-                Debug.LogError($"{timeTablePosition}[3] = {timeTablePosition[3]}");
+                Debug.LogError($"{match.Value}[2] = {match.Groups[MatchIndex.DAY].Value}");
             }
             // 時間
-            Regex r = new Regex(@"(\d)-(\d)");
-            Match match = r.Match(timeTablePosition);
             int startTime, endTime;
             try
             {
-                startTime = int.Parse(match.Groups[1].Value);
-                endTime = int.Parse(match.Groups[2].Value);
+                startTime = int.Parse(match.Groups[MatchIndex.START_TIME].Value);
+                endTime = int.Parse(match.Groups[MatchIndex.END_TIME].Value);
             }
             catch (System.FormatException)
             {
                 startTime = TimeTable.TIME_OTHER;
                 endTime = TimeTable.TIME_OTHER;
-                Debug.LogError($"{match.Groups[1].Value}-{match.Groups[2].Value}");
+                Debug.LogError($"{match.Groups[MatchIndex.START_TIME].Value}-{match.Groups[MatchIndex.END_TIME].Value}");
             }
 
             return (half, day, (startTime, endTime));

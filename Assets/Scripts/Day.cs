@@ -17,19 +17,19 @@ namespace Suggest
             int day;
             switch (s)
             {
-                case "月":
+                case "月曜":
                     day = Day.Monday;
                     break;
-                case "火":
+                case "火曜":
                     day = Day.Tuesday;
                     break;
-                case "水":
+                case "水曜":
                     day = Day.Wednesday;
                     break;
-                case "木":
+                case "木曜":
                     day = Day.Thursday;
                     break;
-                case "金":
+                case "金曜":
                     day = Day.Friday;
                     break;
                 default:
