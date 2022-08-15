@@ -7,7 +7,7 @@ namespace Suggest
     {
         public static void Export<T>(T data, string filePath)
         {
-            string? directoryPath = Path.GetDirectoryName(filePath);
+            string directoryPath = Path.GetDirectoryName(filePath);
             if (directoryPath is not null && !Directory.Exists(directoryPath))
             {
                 Directory.CreateDirectory(directoryPath);

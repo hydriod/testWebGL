@@ -57,34 +57,18 @@ namespace Suggest
             Subjects = new Dictionary<int, Subject>();
         }
 
+        public void suggest()
+        {
+            LoadXml();
+            CreateSuggest(this.department, this.grade);
+            printTimeTable();
+        }
+
         public void printTimeTable()
         {
-            StringBuilder gTableLog = new StringBuilder();
-            foreach (int?[] row in gradeTimeTable[0])
-            {
-                gTableLog.Append("[");
-                foreach (int? e in row)
-                {
-                    gTableLog.Append(e);
-                    gTableLog.Append(", ");
-                }
-                gTableLog.Append("]\n");
-            }
-            Debug.Log(gTableLog.ToString());
-
-            StringBuilder sTableLog = new StringBuilder();
-            foreach (List<int>[] row in suggestTimeTable[0])
-            {
-                sTableLog.Append("[");
-                foreach (List<int> e in row)
-                {
-                    sTableLog.Append("(");
-                    sTableLog.Append(string.Join(", ", e));
-                    sTableLog.Append("), ");
-                }
-                sTableLog.Append("]\n");
-            }
-            Debug.Log(sTableLog.ToString());
+            TimeTablePrinter.printTimeTable(gradeTimeTable, "gradeTimeTable", Subjects);
+            TimeTablePrinter.printTimeTable(suggestTimeTable, "suggestTimeTable", Subjects);
+            TimeTablePrinter.printTimeTable(timeTable, "timeTable", Subjects);
         }
 
         public void LoadXml()
@@ -93,7 +77,7 @@ namespace Suggest
             timeTable = TimeTableExporter.Import<List<int>[][][]>(Application.streamingAssetsPath + "/xml/TimeTable.xml");
         }
 
-        public (int?[][][] departmentTimeTable, List<int>[][][] suggestTimeTable) suggest(string department, int grade)
+        public (int?[][][] departmentTimeTable, List<int>[][][] suggestTimeTable) CreateSuggest(string department, int grade)
         {
             foreach ((int id, Subject subject) in Subjects)
             {

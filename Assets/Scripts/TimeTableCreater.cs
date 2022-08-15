@@ -61,19 +61,7 @@ namespace Suggest
 
         public void printTimeTable()
         {
-            StringBuilder sTableLog = new StringBuilder();
-            foreach (List<int>[] row in timeTable[0])
-            {
-                sTableLog.Append("[");
-                foreach (List<int> e in row)
-                {
-                    sTableLog.Append("(");
-                    sTableLog.Append(string.Join(", ", e));
-                    sTableLog.Append("), ");
-                }
-                sTableLog.Append("]\n");
-            }
-            Debug.Log(sTableLog.ToString());
+            TimeTablePrinter.printTimeTable(timeTable, "AllTimeTable", Subjects);
         }
 
         public void startCreate()
