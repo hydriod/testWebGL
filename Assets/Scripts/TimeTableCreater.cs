@@ -34,8 +34,8 @@ namespace Suggest
             // 時間割のマッチ
             public const int TERM = 1;
             public const int DAY = 2;
-            public const int START_TIME = 5;
-            public const int END_TIME = 6;
+            public const int START_TIME = 4;
+            public const int END_TIME = 5;
         }
 
         private void Awake()
@@ -243,20 +243,22 @@ namespace Suggest
         {
             string timeTablePosition = matchCollection[MatchIndex.TIMETABLE].Groups[MatchIndex.DIV_CONTENT].Value.Replace("&nbsp;", "");
 
-            Regex r = new Regex(@"(\S+) (.曜|集中)((\d)-(\d)限)?");
+            Regex r = new Regex(@"(\S+) (.曜|集中)((\d+)-(\d+)限)?");
             Match match = r.Match(timeTablePosition);
+
+            bool logFlag = false;
 
             // 前期後期
             int half = Term.ToTerm(match.Groups[MatchIndex.TERM].Value);
             if (half == Term.Other)
             {
-                Debug.LogError($"{match.Value}[1] = {match.Groups[MatchIndex.TERM].Value}");
+                logFlag = true;
             }
             // 曜日
             int day = Day.ToDay(match.Groups[MatchIndex.DAY].Value);
             if (day == Day.Other)
             {
-                Debug.LogError($"{match.Value}[2] = {match.Groups[MatchIndex.DAY].Value}");
+                logFlag = true;
             }
             // 時間
             int startTime, endTime;
@@ -269,7 +271,19 @@ namespace Suggest
             {
                 startTime = TimeTable.TIME_OTHER;
                 endTime = TimeTable.TIME_OTHER;
-                Debug.LogError($"{match.Groups[MatchIndex.START_TIME].Value}-{match.Groups[MatchIndex.END_TIME].Value}");
+                logFlag = true;
+            }
+
+            // エラーログ
+            if(logFlag)
+            {
+                StringBuilder log = new StringBuilder("match.Groups = [");
+                for (int i = 0; i < match.Groups.Count; i++)
+                {
+                    log.Append("'").Append(match.Groups[i]).Append("', ");
+                }
+                log.Append("]");
+                Debug.LogError(log.ToString());
             }
 
             return (half, day, (startTime, endTime));

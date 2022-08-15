@@ -33,7 +33,6 @@ namespace Suggest
                     day = Day.Friday;
                     break;
                 default:
-                    Debug.LogError($"{s}");
                     day = Day.Other;
                     break;
             }

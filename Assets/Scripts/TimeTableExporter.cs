@@ -5,9 +5,15 @@ namespace Suggest
 {
     public static class TimeTableExporter
     {
-        public static void Export<T>(T data, string fileName)
+        public static void Export<T>(T data, string filePath)
         {
-            using (FileStream stream = new FileStream(fileName, FileMode.Create))
+            string? directoryPath = Path.GetDirectoryName(filePath);
+            if (directoryPath is not null && !Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
+
+            using (FileStream stream = new FileStream(filePath, FileMode.Create))
             {
                 DataContractSerializer serializer = new DataContractSerializer(typeof(T));
                 serializer.WriteObject(stream, data);

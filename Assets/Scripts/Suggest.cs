@@ -11,6 +11,7 @@ namespace Suggest
         public string department;
         public int grade;
         public string xmlPath;
+        public List<int>[][][] timeTable;
         public List<int>[][][] suggestTimeTable;
         public int?[][][] gradeTimeTable;
 
@@ -89,7 +90,7 @@ namespace Suggest
         public void LoadXml()
         {
             Subjects = TimeTableExporter.Import<Dictionary<int, Subject>>(Application.streamingAssetsPath + "/xml/Syllabus.xml");
-
+            timeTable = TimeTableExporter.Import<List<int>[][][]>(Application.streamingAssetsPath + "/xml/TimeTable.xml");
         }
 
         public (int?[][][] departmentTimeTable, List<int>[][][] suggestTimeTable) suggest(string department, int grade)
