@@ -1,5 +1,8 @@
+using System.Collections;
 using System.IO;
 using System.Runtime.Serialization;
+using UnityEngine.Networking;
+using UnityEngine.Events;
 
 namespace Suggest
 {
@@ -20,15 +23,25 @@ namespace Suggest
             }
         }
 
-        public static T Import<T>(string xmlPath)
+        public static IEnumerator Import<T>(string xmlPath, UnityAction<T> callback)
         {
             T result;
+            
+#if UNITY_WEBGL
+            UnityWebRequest request = new UnityWebRequest(xmlPath);
+            request.downloadHandler = new DownloadHandlerFile(xmlPath); 
+            yield return request.SendWebRequest();
+#endif
+
             using (FileStream stream = new FileStream(xmlPath, FileMode.Open))
             {
                 DataContractSerializer deserializer = new DataContractSerializer(typeof(T));
                 result = (T)deserializer.ReadObject(stream);
             }
-            return result;
+
+            callback(result);
+
+            yield break;
         }
     }
 }
