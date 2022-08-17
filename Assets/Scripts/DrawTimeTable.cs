@@ -29,8 +29,9 @@ namespace Suggest
 
     public class DrawTimeTable : MonoBehaviour
     {
-        public float wide = 900;
-        public float height = 470;
+        public float Width { get; private set; } = 900;
+        public float Height { get; private set; } = 470;
+        public RectTransform rectTransform { get; private set; }
         public Dropdown half;
         [SerializeField] GameObject uiPrefab;
         [SerializeField] Suggest suggest;
@@ -46,9 +47,8 @@ namespace Suggest
         // Start is called before the first frame update
         void Start()
         {
-            Rect r = GetComponent<RectTransform>().rect;
-            wide = r.width;
-            height = r.height;
+            rectTransform = GetComponent<RectTransform>();
+            UpdateWindowSize();
 
             for (int i = 0; i < Day.DAY_MAX - 1; i++)
             {
@@ -78,6 +78,12 @@ namespace Suggest
                 //if (1 < i) { break; }
             }
 
+        }
+
+        private void UpdateWindowSize()
+        {
+            Width = rectTransform.rect.width;
+            Height = rectTransform.rect.height;
         }
 
         public void Draw()
