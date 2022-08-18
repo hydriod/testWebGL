@@ -1,16 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
-using UnityEngine.Networking;
+using TMPro;
 
 namespace Suggest
 {
     public class Suggest : MonoBehaviour
     {
-        public string department;
-        public int grade;
-        public string xmlPath;
+        //public TMP_Dropdown departmentDropdown;
+        //public TMP_Dropdown gradeDropdown;
+        [SerializeField] int half;
+        [SerializeField] string department;
+        [SerializeField] int grade;
+        //public string xmlPath;
         /// <summary>
         /// 全体の時間割
         /// </summary>
@@ -18,20 +20,20 @@ namespace Suggest
         /// <summary>
         /// 提案時間割
         /// </summary>
-        public List<int>[][][] suggestTimeTable;
+        public List<int>[][] suggestTimeTable;
         /// <summary>
         /// 推奨の時間割
         /// </summary>
-        public List<int>[][][] recommendTimeTable;
-
+        public List<int>[][] recommendTimeTable;
         public Dictionary<int, Subject> Subjects { get; set; }
 
 
         private void Awake()
         {
             // リスト初期化
+            /*
             recommendTimeTable = new List<int>[Term.HALF_MAX][][];
-            suggestTimeTable= new List<int>[Term.HALF_MAX][][];
+            suggestTimeTable = new List<int>[Term.HALF_MAX][][];
             for (int i = 0; i < Term.HALF_MAX; i++)
             {
                 recommendTimeTable[i] = new List<int>[Day.DAY_MAX][];
@@ -46,24 +48,35 @@ namespace Suggest
                     }
                 }
             }
+            */
+            recommendTimeTable = new List<int>[Day.DAY_MAX][];
+            suggestTimeTable = new List<int>[Day.DAY_MAX][];
+            for (int i = 0; i < Day.DAY_MAX; i++)
+            {
+                recommendTimeTable[i] = new List<int>[TimeTable.TIME_MAX];
+                suggestTimeTable[i] = new List<int>[TimeTable.TIME_MAX];
+                for (int j = 0; j < TimeTable.TIME_MAX; j++)
+                {
+                    recommendTimeTable[i][j] = new List<int>();
+                }
+            }
+
         }
 
-        private IEnumerator Start() {
+        private IEnumerator Start()
+        {
+            //department = departmentDropdown.options[departmentDropdown.value].text;
+            //grade = gradeDropdown.value;
+
             // 全体の時間割と辞書のロード
             yield return StartCoroutine(LoadXml());
 
             yield break;
         }
 
-        public void suggest()
-        {
-            CreateSuggest(this.department, this.grade);
-            printTimeTable();
-        }
-
         public void printTimeTable()
         {
-            TimeTablePrinter.printTimeTable(recommendTimeTable, "recommendTimeTable", Subjects);
+            TimeTablePrinter.printTimeTable(new List<int>[][][] { recommendTimeTable }, "recommendTimeTable", Subjects);
             TimeTablePrinter.printTimeTable(timeTable, "timeTable", Subjects);
         }
 
@@ -81,55 +94,81 @@ namespace Suggest
                     (result) => timeTable = result
                 )
             );
+            Debug.Log("Load end");
         }
 
-        public void CreateSuggest(string department, int grade)
+        public void CreateSuggest(int half, string department, int grade)
         {
-            // 推奨時間割を作成
-            foreach ((int id, Subject subject) in Subjects)
+            // 全体の時間割から対象科目の時間割を作成
+            // 曜日を全走査
+            for (int i = 0; i < timeTable[half].Length; i++)
             {
-                // 学年一致
-                if (subject.grade == grade)
+                // 時間を全走査
+                for (int j = 0; j < timeTable[half][0].Length; j++)
                 {
-                    bool isTargetSubject = false;
-                    foreach (string element in subject.department)
+                    // 科目
+                    foreach (int id in timeTable[half][i][j])
                     {
-                        // 対象科目
-                        if (department.Contains(element))
+                        // 学年一致
+                        if (Subjects[id].grade == grade)
                         {
-                            isTargetSubject = true;
-                        }
-                    }
-                    // 対象科目なら推奨時間割に追加
-                    if(isTargetSubject)
-                    {
-                        for (int i = subject.startTime - 1; i < subject.endTime; i++)
-                        {
-                            recommendTimeTable[subject.half][subject.day][i].Add(subject.id);
-                        }
-                    }
+                            bool isTargetSubject = false;
+                            foreach (string element in Subjects[id].department)
+                            {
+                                //Debug.Log($"{element} in {department}");
+                                // 対象科目
+                                if (department.Contains(element))
+                                {
+                                    isTargetSubject = true;
+                                }
+                            }
+                            // 対象科目なら推奨時間割に追加
+                            if (isTargetSubject)
+                            {
+                                recommendTimeTable[i][j].Add(id);
+                            }
 
+                        }
+                    }
                 }
             }
+
 
             // 提案時間割を作成
-            for (int i = 0; i < Term.HALF_MAX; i++)
+            for (int i = 0; i < Day.DAY_MAX; i++)
             {
-                for (int j = 0; j < Day.DAY_MAX; j++)
+                for (int j = 0; j < TimeTable.TIME_MAX; j++)
                 {
-                    for (int k = 0; k < TimeTable.TIME_MAX; k++)
+                    // 対象科目があればこれを提案
+                    if (recommendTimeTable[i][j].Count != 0)
                     {
-                        if(recommendTimeTable[i][j][k].Count != 0)
-                        {
-                            suggestTimeTable[i][j][k] = recommendTimeTable[i][j][k];
-                        }
-                        else
-                        {
-                            suggestTimeTable[i][j][k] = timeTable[i][j][k];
-                        }
+                        suggestTimeTable[i][j] = recommendTimeTable[i][j];
                     }
+                    else // 無ければ全体のものを使用
+                    {
+                        suggestTimeTable[i][j] = timeTable[half][i][j];
+                    }
+
                 }
             }
+        }
+        public void CreateSuggest()
+        {
+            CreateSuggest(this.half, this.department, this.grade);
+            printTimeTable();
+        }
+
+        public void ChangedDepartmentDropdown(TMP_Dropdown dropdown)
+        {
+            department = dropdown.options[dropdown.value].text;
+        }
+        public void ChangedGradeDropdown(TMP_Dropdown dropdown)
+        {
+            grade = dropdown.value;
+        }
+        public void ChangedHalfDropdown(TMP_Dropdown dropdown)
+        {
+            half = dropdown.value;
         }
     }
 }

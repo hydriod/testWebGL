@@ -212,9 +212,11 @@ MonoBehaviour:
   m_Placeholder: {fileID: 0}
   m_ItemText: {fileID: 2044922440}
   m_ItemImage: {fileID: 0}
-  m_Value: 4
+  m_Value: 0
   m_Options:
     m_Options:
+    - m_Text: "\u5B66\u5E74"
+      m_Image: {fileID: 0}
     - m_Text: "1\u5E74\u6B21"
       m_Image: {fileID: 0}
     - m_Text: "2\u5E74\u6B21"
@@ -223,11 +225,21 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: "4\u5E74\u6B21"
       m_Image: {fileID: 0}
-    - m_Text: "\u5B66\u5E74"
-      m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2037654990}
+        m_TargetAssemblyTypeName: Suggest.Suggest, Assembly-CSharp
+        m_MethodName: ChangedGradeDropdown
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 27197771}
+          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Dropdown, Unity.TextMeshPro
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_AlphaFadeSpeed: 0.15
 --- !u!114 &27197772
 MonoBehaviour:
@@ -1955,7 +1967,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u5DE5\u5B66\u90E8\u7B2C\u4E8C\u90E8 \u7269\u8CEA\u5DE5\u5B66\u79D1"
+  m_text: "\u5B66\u79D1"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: bfeab9bb1af553441835e9ce56e82365, type: 2}
   m_sharedMaterial: {fileID: 4337509062710080329, guid: bfeab9bb1af553441835e9ce56e82365, type: 2}
@@ -2197,49 +2209,51 @@ MonoBehaviour:
   m_Placeholder: {fileID: 0}
   m_ItemText: {fileID: 1348116738}
   m_ItemImage: {fileID: 0}
-  m_Value: 5
+  m_Value: 19
   m_Options:
     m_Options:
-    - m_Text: "\u5DE5\u5B66\u90E8\u7B2C\u4E00\u90E8 \u751F\u547D\u30FB\u5FDC\u7528\u5316\u5B66\u79D1"
+    - m_Text: "\u5DE5\u5B66\u90E8\u7B2C\u4E00\u90E8  \u751F\u547D\u30FB\u5FDC\u7528\u5316\u5B66\u79D1"
       m_Image: {fileID: 0}
-    - m_Text: "\u5DE5\u5B66\u90E8\u7B2C\u4E00\u90E8 \u7269\u7406\u5DE5\u5B66\u79D1"
+    - m_Text: "\u5DE5\u5B66\u90E8\u7B2C\u4E00\u90E8  \u7269\u7406\u5DE5\u5B66\u79D1"
       m_Image: {fileID: 0}
-    - m_Text: "\u5DE5\u5B66\u90E8\u7B2C\u4E00\u90E8 \u96FB\u6C17\u30FB\u6A5F\u68B0\u5DE5\u5B66\u79D1"
+    - m_Text: "\u5DE5\u5B66\u90E8\u7B2C\u4E00\u90E8  \u96FB\u6C17\u30FB\u6A5F\u68B0\u5DE5\u5B66\u79D1"
       m_Image: {fileID: 0}
-    - m_Text: "\u5DE5\u5B66\u90E8\u7B2C\u4E00\u90E8 \u793E\u4F1A\u5DE5\u5B66\u79D1"
+    - m_Text: "\u5DE5\u5B66\u90E8\u7B2C\u4E00\u90E8  \u60C5\u5831\u5DE5\u5B66\u79D1"
       m_Image: {fileID: 0}
-    - m_Text: "\u5DE5\u5B66\u90E8\u7B2C\u4E00\u90E8 \u5275\u9020\u5DE5\u5B66\u6559\u80B2\u8AB2\u7A0B"
+    - m_Text: "\u5DE5\u5B66\u90E8\u7B2C\u4E00\u90E8  \u793E\u4F1A\u5DE5\u5B66\u79D1"
       m_Image: {fileID: 0}
-    - m_Text: "\u5DE5\u5B66\u90E8\u7B2C\u4E8C\u90E8 \u7269\u8CEA\u5DE5\u5B66\u79D1"
+    - m_Text: "\u5DE5\u5B66\u90E8\u7B2C\u4E00\u90E8  \u5275\u9020\u5DE5\u5B66\u6559\u80B2\u8AB2\u7A0B"
       m_Image: {fileID: 0}
-    - m_Text: "\u5DE5\u5B66\u90E8\u7B2C\u4E8C\u90E8 \u6A5F\u68B0\u5DE5\u5B66\u79D1"
+    - m_Text: "\u5DE5\u5B66\u90E8\u7B2C\u4E8C\u90E8  \u7269\u8CEA\u5DE5\u5B66\u79D1"
       m_Image: {fileID: 0}
-    - m_Text: "\u5DE5\u5B66\u90E8\u7B2C\u4E8C\u90E8 \u96FB\u6C17\u60C5\u5831\u5DE5\u5B66\u79D1"
+    - m_Text: "\u5DE5\u5B66\u90E8\u7B2C\u4E8C\u90E8  \u6A5F\u68B0\u5DE5\u5B66\u79D1"
       m_Image: {fileID: 0}
-    - m_Text: "\u5DE5\u5B66\u90E8\u7B2C\u4E8C\u90E8 \u793E\u4F1A\u958B\u767A\u5DE5\u5B66\u79D1"
+    - m_Text: "\u5DE5\u5B66\u90E8\u7B2C\u4E8C\u90E8  \u96FB\u6C17\u60C5\u5831\u5DE5\u5B66\u79D1"
       m_Image: {fileID: 0}
-    - m_Text: "\u5DE5\u5B66\u7814\u7A76\u79D1\u535A\u58EB\u524D\u671F\u8AB2\u7A0B
+    - m_Text: "\u5DE5\u5B66\u90E8\u7B2C\u4E8C\u90E8  \u793E\u4F1A\u958B\u767A\u5DE5\u5B66\u79D1"
+      m_Image: {fileID: 0}
+    - m_Text: "\u5DE5\u5B66\u7814\u7A76\u79D1\u535A\u58EB\u524D\u671F\u8AB2\u7A0B 
         \u5DE5\u5B66\u5C02\u653B"
       m_Image: {fileID: 0}
-    - m_Text: "\u5DE5\u5B66\u7814\u7A76\u79D1\u535A\u58EB\u5F8C\u671F\u8AB2\u7A0B
+    - m_Text: "\u5DE5\u5B66\u7814\u7A76\u79D1\u535A\u58EB\u5F8C\u671F\u8AB2\u7A0B 
         \u5171\u540C\u30CA\u30CE\u30E1\u30C7\u30A3\u30B7\u30F3\u79D1\u5B66\u5C02\u653B"
       m_Image: {fileID: 0}
-    - m_Text: "\u5DE5\u5B66\u7814\u7A76\u79D1\u535A\u58EB\u5F8C\u671F\u8AB2\u7A0B
+    - m_Text: "\u5DE5\u5B66\u7814\u7A76\u79D1\u535A\u58EB\u5F8C\u671F\u8AB2\u7A0B 
         \u751F\u547D\u30FB\u5FDC\u7528\u5316\u5B66\u5C02\u653B"
       m_Image: {fileID: 0}
-    - m_Text: "\u5DE5\u5B66\u7814\u7A76\u79D1\u535A\u58EB\u5F8C\u671F\u8AB2\u7A0B
+    - m_Text: "\u5DE5\u5B66\u7814\u7A76\u79D1\u535A\u58EB\u5F8C\u671F\u8AB2\u7A0B 
         \u7269\u7406\u5DE5\u5B66\u5C02\u653B"
       m_Image: {fileID: 0}
-    - m_Text: "\u5DE5\u5B66\u7814\u7A76\u79D1\u535A\u58EB\u5F8C\u671F\u8AB2\u7A0B
+    - m_Text: "\u5DE5\u5B66\u7814\u7A76\u79D1\u535A\u58EB\u5F8C\u671F\u8AB2\u7A0B 
         \u96FB\u6C17\u30FB\u6A5F\u68B0\u5DE5\u5B66\u5C02\u653B"
       m_Image: {fileID: 0}
-    - m_Text: "\u5DE5\u5B66\u7814\u7A76\u79D1\u535A\u58EB\u5F8C\u671F\u8AB2\u7A0B
+    - m_Text: "\u5DE5\u5B66\u7814\u7A76\u79D1\u535A\u58EB\u5F8C\u671F\u8AB2\u7A0B 
         \u60C5\u5831\u5DE5\u5B66\u5C02\u653B"
       m_Image: {fileID: 0}
-    - m_Text: "\u5DE5\u5B66\u7814\u7A76\u79D1\u535A\u58EB\u5F8C\u671F\u8AB2\u7A0B
+    - m_Text: "\u5DE5\u5B66\u7814\u7A76\u79D1\u535A\u58EB\u5F8C\u671F\u8AB2\u7A0B 
         \u793E\u4F1A\u5DE5\u5B66\u5C02\u653B"
       m_Image: {fileID: 0}
-    - m_Text: "\u5DE5\u5B66\u7814\u7A76\u79D1\u535A\u58EB\u5F8C\u671F\u8AB2\u7A0B
+    - m_Text: "\u5DE5\u5B66\u7814\u7A76\u79D1\u535A\u58EB\u5F8C\u671F\u8AB2\u7A0B 
         \u5DE5\u5B66\u5C02\u653B"
       m_Image: {fileID: 0}
     - m_Text: "\u57FA\u5E79\u5DE5\u5B66\u6559\u80B2\u8AB2\u7A0B"
@@ -2248,7 +2262,19 @@ MonoBehaviour:
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2037654990}
+        m_TargetAssemblyTypeName: Suggest.Suggest, Assembly-CSharp
+        m_MethodName: ChangedDepartmentDropdown
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 895687953}
+          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Dropdown, Unity.TextMeshPro
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_AlphaFadeSpeed: 0.15
 --- !u!114 &895687954
 MonoBehaviour:
@@ -2421,11 +2447,29 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: "\u5F8C\u671F"
       m_Image: {fileID: 0}
-    - m_Text: "\u7B2C1\u30AF\u30AA\u30FC\u30BF\u30FC"
+    - m_Text: "\u7B2C\uFF11\u30AF\u30AA\u30FC\u30BF\u30FC"
+      m_Image: {fileID: 0}
+    - m_Text: "\u7B2C\uFF12\u30AF\u30AA\u30FC\u30BF\u30FC"
+      m_Image: {fileID: 0}
+    - m_Text: "\u7B2C\uFF13\u30AF\u30A9\u30FC\u30BF\u30FC"
+      m_Image: {fileID: 0}
+    - m_Text: "\u7B2C\uFF14\u30AF\u30AA\u30FC\u30BF\u30FC"
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2037654990}
+        m_TargetAssemblyTypeName: Suggest.Suggest, Assembly-CSharp
+        m_MethodName: ChangedHalfDropdown
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 925064806}
+          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Dropdown, Unity.TextMeshPro
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_AlphaFadeSpeed: 0.15
 --- !u!114 &925064807
 MonoBehaviour:
@@ -3151,7 +3195,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Option A
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: bfeab9bb1af553441835e9ce56e82365, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -3215,7 +3259,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1348116739
@@ -3672,9 +3716,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6cf1d29a5474d241823a3f22bea1cc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  half: {fileID: 0}
   uiPrefab: {fileID: 5232877656133186208, guid: 5eb1d5996e7e31d4f949a936b6ccfe8c, type: 3}
-  suggest: {fileID: 0}
+  suggest: {fileID: 2037654990}
   table: []
 --- !u!1 &1507781847
 GameObject:
@@ -4282,6 +4325,53 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 28}
   m_Pivot: {x: 0.5, y: 1}
+--- !u!1 &2037654989
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2037654991}
+  - component: {fileID: 2037654990}
+  m_Layer: 0
+  m_Name: Suggest
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2037654990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2037654989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8f8f4d2bb01e754ebaab2b7423f04ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  half: 0
+  department: 
+  grade: 0
+--- !u!4 &2037654991
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2037654989}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2044922438
 GameObject:
   m_ObjectHideFlags: 0
@@ -4342,7 +4432,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Option A
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: bfeab9bb1af553441835e9ce56e82365, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -4406,7 +4496,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &2044922441
@@ -4477,7 +4567,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Option A
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: bfeab9bb1af553441835e9ce56e82365, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -4541,7 +4631,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &2105527675

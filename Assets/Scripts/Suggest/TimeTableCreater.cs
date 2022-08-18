@@ -157,7 +157,7 @@ namespace Suggest
                 //}
 
 
-                for (int i = subject.startTime - 1; i < subject.endTime; i++)
+                for (int i = subject.startTime; i <= subject.endTime; i++)
                 {
                     timeTable[subject.half][subject.day][i].Add(subject.id);
                 }

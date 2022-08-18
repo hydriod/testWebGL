@@ -27,7 +27,8 @@ namespace Suggest
         {
             T result;
             
-#if UNITY_WEBGL
+#if UNITY_EDITOR
+#else
             UnityWebRequest request = new UnityWebRequest(xmlPath);
             request.downloadHandler = new DownloadHandlerFile(xmlPath); 
             yield return request.SendWebRequest();

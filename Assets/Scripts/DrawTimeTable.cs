@@ -2,15 +2,18 @@ using System.Text;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 namespace Suggest
 {
+    /// <summary>
+    /// インスペクタ表示用クラス
+    /// </summary>
     [System.Serializable]
-    class DropdownArray
+    public class DropdownArray
     {
         public TMP_Dropdown[] table;
+        public int Length { get => table.Length; }
 
         public DropdownArray() { }
         public DropdownArray(TMP_Dropdown[] value)
@@ -24,23 +27,28 @@ namespace Suggest
             set => this.table[index] = value;
         }
         public static implicit operator DropdownArray(TMP_Dropdown[] value) => new DropdownArray(value);
-        public static implicit operator TMP_Dropdown[](DropdownArray value) => value;
+        public static implicit operator TMP_Dropdown[](DropdownArray value) => value.table;
     }
 
     public class DrawTimeTable : MonoBehaviour
     {
-        public float Width { get; private set; } = 900;
-        public float Height { get; private set; } = 470;
+        public float Width { get; private set; }
+        public float Height { get; private set; }
         public RectTransform rectTransform { get; private set; }
-        public Dropdown half;
         [SerializeField] GameObject uiPrefab;
         [SerializeField] Suggest suggest;
         [SerializeField] DropdownArray[] table;
+        public DropdownArray[] Table { get; private set; }
 
         private void Awake()
         {
-            table = new DropdownArray[Day.DAY_MAX - 1];
-            table[0] = new TMP_Dropdown[TimeTable.TIME_MAX];
+            // 配列の初期化
+            Table = new DropdownArray[Day.DAY_MAX - 1];
+            for (int day = 0; day < Table.Length; day++)
+            {
+                Table[day] = new TMP_Dropdown[TimeTable.TIME_MAX - 1];
+
+            }
 
         }
 
@@ -68,10 +76,10 @@ namespace Suggest
                     rect.pivot = new Vector2(0, 1);
                     //rect.sizeDelta = new Vector2(180, 60);
 
-                    Debug.Log(rect.anchorMin);
-                    Debug.Log(new Vector2(xMin, yMin));
+                    //Debug.Log(rect.anchorMin);
+                    //Debug.Log(new Vector2(xMin, yMin));
 
-                    table[i][j] = go.GetComponent<TMP_Dropdown>();
+                    Table[i][j] = go.GetComponent<TMP_Dropdown>();
 
                     //if (1 < j) { break; }
                 }
@@ -88,12 +96,12 @@ namespace Suggest
 
         public void Draw()
         {
-            suggest.suggest();
-            for (int i = 0; i < table.Length; i++)
+            suggest.CreateSuggest();
+            for (int i = 0; i < Table.Length; i++)
             {
-                for (int j = 0; j < table[0].table.Length; j++)
+                for (int j = 0; j < Table[i].Length; j++)
                 {
-                    table[i][j].options = convert(suggest.suggestTimeTable[half.value][i][j]);
+                    Table[i][j].options = convert(suggest.suggestTimeTable[i][j]);
                 }
             }
 
