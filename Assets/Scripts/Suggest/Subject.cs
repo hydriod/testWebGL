@@ -3,6 +3,10 @@ using System.Runtime.Serialization;
 
 namespace Suggest
 {
+    /// <summary>
+    /// 科目クラス
+    /// 
+    /// </summary>
     [DataContract]
     public class Subject
     {

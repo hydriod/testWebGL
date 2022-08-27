@@ -9,7 +9,16 @@ namespace Suggest
     {
         //public TMP_Dropdown departmentDropdown;
         //public TMP_Dropdown gradeDropdown;
+        /// <summary>
+        /// <para>提案する前期後期,クオーター</para>
+        /// <para>"Assets\Scripts\Suggest"を参照</para>
+        /// </summary>
         [SerializeField] int half;
+        /// <summary>
+        /// <para>提案する学科</para>
+        /// <para>"工学部第一部  生命・応用化学科"など</para>
+        /// <para>1文字でも違うと正しく処理されないため注意</para>
+        /// </summary>
         [SerializeField] string department;
         [SerializeField] int grade;
         //public string xmlPath;

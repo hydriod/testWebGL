@@ -6,6 +6,9 @@ using TMPro;
 
 namespace Suggest
 {
+    /// <summary>
+    /// UI 描画
+    /// </summary>
     public class DrawTimeTable : MonoBehaviour
     {
         public RectTransform rectTransform { get; private set; }
