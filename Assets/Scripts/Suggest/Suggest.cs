@@ -7,8 +7,6 @@ namespace Suggest
 {
     public class Suggest : MonoBehaviour
     {
-        //public TMP_Dropdown departmentDropdown;
-        //public TMP_Dropdown gradeDropdown;
         /// <summary>
         /// <para>提案する前期後期,クオーター</para>
         /// <para>"Assets\Scripts\Suggest"を参照</para>
@@ -27,29 +25,31 @@ namespace Suggest
         /// </summary>
         public List<int>[][][] timeTable;
         /// <summary>
-        /// 提案時間割
+        /// 提案(対象)科目
         /// </summary>
-        public List<int>[] suggestTimeTable;
+        public HashSet<Subject>[] suggestTimeTable;
         /// <summary>
         /// 推奨の時間割
+        /// 表示する時間割
         /// </summary>
-        public HashSet<int>[] recommendTimeTable;
+        public HashSet<Subject>[] uiDrawTimeTable;
         /// <summary>
         /// <para>シラバスの情報</para>
         /// <para>phpファイルの番号がキー</para>
         /// </summary>
-        public Dictionary<int, Subject> Syllabus { get; set; }
+        private Dictionary<int, Subject> syllabus;
+        public IReadOnlyDictionary<int, Subject> Syllabus { get => syllabus; }
 
 
         private void Awake()
         {
             // リスト初期化
-            recommendTimeTable = new HashSet<int>[Day.DAY_MAX];
-            suggestTimeTable = new List<int>[Day.DAY_MAX];
+            uiDrawTimeTable = new HashSet<Subject>[Day.DAY_MAX];
+            suggestTimeTable = new HashSet<Subject>[Day.DAY_MAX];
             for (int day = 0; day < Day.DAY_MAX; day++)
             {
-                recommendTimeTable[day] = new HashSet<int>();
-                suggestTimeTable[day] = new List<int>();
+                uiDrawTimeTable[day] = new HashSet<Subject>();
+                suggestTimeTable[day] = new HashSet<Subject>();
             }
 
         }
@@ -67,16 +67,23 @@ namespace Suggest
 
         public void printTimeTable()
         {
-            //TimeTablePrinter.printTimeTable(new List<int>[][][] { recommendTimeTable }, "recommendTimeTable", Syllabus);
+            TimeTablePrinter.printSyllabus(Syllabus);
+            TimeTablePrinter.printTimeTable(suggestTimeTable, "suggest TimeTable");
+            TimeTablePrinter.printTimeTable(uiDrawTimeTable, "uiDrawTimeTable");
             TimeTablePrinter.printTimeTable(timeTable, "timeTable", Syllabus);
         }
 
+        /// <summary>
+        /// XMLファイル一式をロードする
+        /// </summary>
+        /// <returns></returns>
         public IEnumerator LoadXml()
         {
+            Debug.Log("Load start");
             yield return StartCoroutine(
                 TimeTableExporter.Import<Dictionary<int, Subject>>(
                     Application.streamingAssetsPath + "/xml/Syllabus.xml",
-                    (result) => Syllabus = result
+                    (result) => syllabus = result
                 )
             );
             yield return StartCoroutine(
@@ -90,7 +97,17 @@ namespace Suggest
 
         public void CreateSuggest(int half, string department, int grade)
         {
-            bool[,] is_empty = new bool[5, 14];
+            // 空きコマか
+            bool[,] is_empty = new bool[Day.DAY_MAX, TimeTable.TIME_MAX]
+                {
+                    {true, true, true, true, true, true, true, true, true, true, true, true, true, true, true},
+                    {true, true, true, true, true, true, true, true, true, true, true, true, true, true, true},
+                    {true, true, true, true, true, true, true, true, true, true, true, true, true, true, true},
+                    {true, true, true, true, true, true, true, true, true, true, true, true, true, true, true},
+                    {true, true, true, true, true, true, true, true, true, true, true, true, true, true, true},
+                    {true, true, true, true, true, true, true, true, true, true, true, true, true, true, true}
+                };
+
             // 全体の時間割から対象科目の時間割を作成
             // 曜日を全走査
             for (int day = 0; day < timeTable[half].Length; day++)
@@ -107,13 +124,16 @@ namespace Suggest
                             foreach (string element in Syllabus[id].department)
                             {
                                 //Debug.Log($"{element} in {department}");
-                                // 対象科目なら追加
+                                // 対象科目
                                 if (department.Contains(element))
                                 {
-                                    recommendTimeTable[day].Add(id);
+                                    // 時間割に追加
+                                    suggestTimeTable[day].Add(Syllabus[id]);
+
+                                    // 始めのコマが空きコマならUI表示用に追加
                                     if(is_empty[day, j])
                                     {
-                                        suggestTimeTable[day].Add(id);
+                                        uiDrawTimeTable[day].Add(Syllabus[id]);
                                         for(int i=Syllabus[id].startTime;i<=Syllabus[id].endTime;i++)
                                         {
                                             is_empty[day, i] = false;

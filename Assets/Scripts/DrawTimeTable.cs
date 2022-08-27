@@ -12,21 +12,21 @@ namespace Suggest
     public class DrawTimeTable : MonoBehaviour
     {
         public RectTransform rectTransform { get; private set; }
-        [SerializeField] GameObject[] dayFrame = new GameObject[5];
-        [SerializeField] GameObject uiPrefab;
+        [SerializeField] GameObject[] dayFrame = new GameObject[Day.DAY_MAX - 1];
+        [SerializeField] GameObject subjectUiPrefab;
         [SerializeField] Suggest suggest;
-        [SerializeField] HashSet<GameObject>[] tablePanel;
-        public IReadOnlyCollection<GameObject>[] TablePanel { get => tablePanel; }
 
         private void Awake()
         {
             // 配列の初期化
+            /*
             tablePanel = new HashSet<GameObject>[Day.DAY_MAX - 1];
             for (int day = 0; day < tablePanel.Length; day++)
             {
                 tablePanel[day] = new HashSet<GameObject>();
 
             }
+            */
         }
 
         // Start is called before the first frame update
@@ -47,6 +47,17 @@ namespace Suggest
                 }
             }
             */
+
+            for (int day = 0; day < Day.DAY_MAX - 1; day++)
+            {
+                foreach (Subject s in suggest.uiDrawTimeTable[day])
+                {
+                    GameObject go = Instantiate(subjectUiPrefab, dayFrame[day].transform);
+                    RectTransform t = go.GetComponent<RectTransform>();
+                    //t.anchorMax = 
+                    break;
+                }
+            }
         }
 
         private List<TMP_Dropdown.OptionData> convert(IReadOnlyList<int> idList)

@@ -15,7 +15,7 @@ namespace Suggest
         /// Suggest.Syllabusなどをログに流す
         /// </summary>
         /// <param name="syllabus"></param>
-        public static void printSyllabus(Dictionary<int, Subject> syllabus)
+        public static void printSyllabus(IReadOnlyDictionary<int, Subject> syllabus)
         {
             StringBuilder logString = new StringBuilder("Syllabus\n");
             foreach (var (id, subject) in syllabus)
@@ -32,7 +32,7 @@ namespace Suggest
         /// <param name="timeTables"></param>
         /// <param name="tableName"></param>
         /// <param name="syllabus"></param>
-        public static void printTimeTable(int?[][][] timeTables, string tableName, Dictionary<int, Subject> syllabus)
+        public static void printTimeTable(int?[][][] timeTables, string tableName, IReadOnlyDictionary<int, Subject> syllabus)
         {
             StringBuilder logString = new StringBuilder();
 
@@ -61,18 +61,18 @@ namespace Suggest
         /// <param name="timeTables"></param>
         /// <param name="tableName"></param>
         /// <param name="syllabus"></param>
-        public static void printTimeTable(List<int>[][][] timeTables, string tableName, Dictionary<int, Subject> syllabus)
+        public static void printTimeTable(IEnumerable<int>[][][] timeTables, string tableName, IReadOnlyDictionary<int, Subject> syllabus)
         {
             StringBuilder logString = new StringBuilder();
 
             logString.Append(tableName).Append("\n");
-            foreach (List<int>[][] table in timeTables)
+            foreach (IEnumerable<int>[][] table in timeTables)
             {
                 logString.Append("###########\n");
-                foreach (List<int>[] row in table)
+                foreach (IEnumerable<int>[] row in table)
                 {
                     logString.Append("[");
-                    foreach (List<int> item in row)
+                    foreach (IEnumerable<int> item in row)
                     {
                         logString.Append(SubjectToString(item, syllabus)).Append(", ");
                     }
@@ -83,24 +83,19 @@ namespace Suggest
 
             Debug.Log(logString.ToString());
         }
-        public static void printTimeTable<T>(T[][][] timeTables, string tableName, Dictionary<int, Subject> syllabus)
+        public static void printTimeTable(IEnumerable<Subject>[] timeTable, string tableName, IReadOnlyDictionary<int, Subject> syllabus = null)
         {
             StringBuilder logString = new StringBuilder();
 
             logString.Append(tableName).Append("\n");
-            foreach (T[][] table in timeTables)
+            foreach (IEnumerable<Subject> day in timeTable)
             {
-                logString.Append("###########\n");
-                foreach (T[] row in table)
+                logString.Append("[");
+                foreach (Subject item in day)
                 {
-                    logString.Append("[");
-                    foreach (T item in row)
-                    {
-                        logString.Append(SubjectToString(item, syllabus)).Append(", ");
-                    }
-                    logString.Append("]\n");
+                    logString.Append(item.name).Append(", ");
                 }
-                logString.Append("###########\n");
+                logString.Append("]\n");
             }
 
             Debug.Log(logString.ToString());
@@ -108,19 +103,15 @@ namespace Suggest
 
         // 以下,科目名に変換する内部関数
 
-        static string SubjectToString(int? id, Dictionary<int, Subject> syllabus)
+        static string SubjectToString(int? id, IReadOnlyDictionary<int, Subject> syllabus)
         {
-            if(id is null)
+            if (id is null)
             {
                 return "";
             }
             return syllabus[(int)id].name;
         }
-        static string SubjectToString(Subject subject, Dictionary<int, Subject> syllabus)
-        {
-            return subject.name;
-        }
-        static string SubjectToString(List<int> list, Dictionary<int, Subject> syllabus)
+        static string SubjectToString(IEnumerable<int> list, IReadOnlyDictionary<int, Subject> syllabus)
         {
             StringBuilder stringBuilder = new StringBuilder("(");
             foreach (int item in list)
@@ -131,7 +122,7 @@ namespace Suggest
 
             return stringBuilder.ToString();
         }
-        static string SubjectToString(List<Subject> list, Dictionary<int, Subject> syllabus)
+        static string SubjectToString(IEnumerable<Subject> list, IReadOnlyDictionary<int, Subject> syllabus)
         {
             StringBuilder stringBuilder = new StringBuilder("(");
             foreach (Subject item in list)
@@ -142,9 +133,9 @@ namespace Suggest
 
             return stringBuilder.ToString();
         }
-        static string SubjectToString<T>(T obj, Dictionary<int, Subject> syllabus)
+        static string SubjectToString<T>(T obj, IReadOnlyDictionary<int, Subject> syllabus)
         {
-            if(obj is null)
+            if (obj is null)
             {
                 return "";
             }
