@@ -20,45 +20,23 @@ namespace Suggest
         /// <summary>
         /// 提案時間割
         /// </summary>
-        public List<int>[][] suggestTimeTable;
+        public List<int>[] suggestTimeTable;
         /// <summary>
         /// 推奨の時間割
         /// </summary>
-        public List<int>[][] recommendTimeTable;
+        public HashSet<int>[] recommendTimeTable;
         public Dictionary<int, Subject> Subjects { get; set; }
 
 
         private void Awake()
         {
             // リスト初期化
-            /*
-            recommendTimeTable = new List<int>[Term.HALF_MAX][][];
-            suggestTimeTable = new List<int>[Term.HALF_MAX][][];
-            for (int i = 0; i < Term.HALF_MAX; i++)
+            recommendTimeTable = new HashSet<int>[Day.DAY_MAX];
+            suggestTimeTable = new List<int>[Day.DAY_MAX];
+            for (int day = 0; day < Day.DAY_MAX; day++)
             {
-                recommendTimeTable[i] = new List<int>[Day.DAY_MAX][];
-                suggestTimeTable[i] = new List<int>[Day.DAY_MAX][];
-                for (int j = 0; j < Day.DAY_MAX; j++)
-                {
-                    recommendTimeTable[i][j] = new List<int>[TimeTable.TIME_MAX];
-                    suggestTimeTable[i][j] = new List<int>[TimeTable.TIME_MAX];
-                    for (int k = 0; k < TimeTable.TIME_MAX; k++)
-                    {
-                        recommendTimeTable[i][j][k] = new List<int>();
-                    }
-                }
-            }
-            */
-            recommendTimeTable = new List<int>[Day.DAY_MAX][];
-            suggestTimeTable = new List<int>[Day.DAY_MAX][];
-            for (int i = 0; i < Day.DAY_MAX; i++)
-            {
-                recommendTimeTable[i] = new List<int>[TimeTable.TIME_MAX];
-                suggestTimeTable[i] = new List<int>[TimeTable.TIME_MAX];
-                for (int j = 0; j < TimeTable.TIME_MAX; j++)
-                {
-                    recommendTimeTable[i][j] = new List<int>();
-                }
+                recommendTimeTable[day] = new HashSet<int>();
+                suggestTimeTable[day] = new List<int>();
             }
 
         }
@@ -76,7 +54,7 @@ namespace Suggest
 
         public void printTimeTable()
         {
-            TimeTablePrinter.printTimeTable(new List<int>[][][] { recommendTimeTable }, "recommendTimeTable", Subjects);
+            //TimeTablePrinter.printTimeTable(new List<int>[][][] { recommendTimeTable }, "recommendTimeTable", Subjects);
             TimeTablePrinter.printTimeTable(timeTable, "timeTable", Subjects);
         }
 
@@ -99,56 +77,40 @@ namespace Suggest
 
         public void CreateSuggest(int half, string department, int grade)
         {
+            bool[,] is_empty = new bool[5, 14];
             // 全体の時間割から対象科目の時間割を作成
             // 曜日を全走査
-            for (int i = 0; i < timeTable[half].Length; i++)
+            for (int day = 0; day < timeTable[half].Length; day++)
             {
                 // 時間を全走査
-                for (int j = 0; j < timeTable[half][0].Length; j++)
+                for (int j = 0; j < timeTable[half][day].Length; j++)
                 {
                     // 科目
-                    foreach (int id in timeTable[half][i][j])
+                    foreach (int id in timeTable[half][day][j])
                     {
                         // 学年一致
                         if (Subjects[id].grade == grade)
                         {
-                            bool isTargetSubject = false;
                             foreach (string element in Subjects[id].department)
                             {
                                 //Debug.Log($"{element} in {department}");
-                                // 対象科目
+                                // 対象科目なら追加
                                 if (department.Contains(element))
                                 {
-                                    isTargetSubject = true;
+                                    recommendTimeTable[day].Add(id);
+                                    if(is_empty[day, j])
+                                    {
+                                        suggestTimeTable[day].Add(id);
+                                        for(int i=Subjects[id].startTime;i<=Subjects[id].endTime;i++)
+                                        {
+                                            is_empty[day, i] = false;
+                                        }
+                                    }
+                                    break;
                                 }
                             }
-                            // 対象科目なら推奨時間割に追加
-                            if (isTargetSubject)
-                            {
-                                recommendTimeTable[i][j].Add(id);
-                            }
-
                         }
                     }
-                }
-            }
-
-
-            // 提案時間割を作成
-            for (int i = 0; i < Day.DAY_MAX; i++)
-            {
-                for (int j = 0; j < TimeTable.TIME_MAX; j++)
-                {
-                    // 対象科目があればこれを提案
-                    if (recommendTimeTable[i][j].Count != 0)
-                    {
-                        suggestTimeTable[i][j] = recommendTimeTable[i][j];
-                    }
-                    else // 無ければ全体のものを使用
-                    {
-                        suggestTimeTable[i][j] = timeTable[half][i][j];
-                    }
-
                 }
             }
         }

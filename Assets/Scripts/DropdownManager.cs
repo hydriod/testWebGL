@@ -6,13 +6,13 @@ using Suggest;
 namespace TimeTableUI
 {    
     public class DropdownManager : MonoBehaviour {
-        DropdownArray[] timeTable;
+        //DropdownArray[] timeTable;
         [SerializeField] Suggest.Suggest suggest;
         [SerializeField] TMP_Dropdown half;
         [SerializeField] DrawTimeTable drawer;
 
         private void Start() {
-            timeTable = drawer.Table;
+            //timeTable = drawer.Table;
         }
 
         /*

@@ -19,6 +19,9 @@ namespace Suggest
         public const int Quarter3 = 4;
         public const int Quarter4 = 5;
         public const int Other = 6;
+        /// <summary>
+        /// 配列長さ用
+        /// </summary>
         public const int HALF_MAX = 7;
 
         public static int ToTerm(string s)
