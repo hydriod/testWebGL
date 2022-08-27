@@ -6,6 +6,9 @@ using System.Text;
 
 namespace Suggest
 {
+    /// <summary>
+    /// デバッグログに出力するための関数を集めたクラス
+    /// </summary>
     public class TimeTablePrinter
     {
         public static void printTimeTable(int?[][][] timeTables, string tableName, Dictionary<int, Subject> Subjects)

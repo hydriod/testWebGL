@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace Suggest
 {
+    /// <summary>
+    /// 曜日の定数定義
+    /// </summary>
     public static class Day
     {
         public const int Monday = 0;

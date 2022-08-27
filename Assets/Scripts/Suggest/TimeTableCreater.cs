@@ -8,6 +8,10 @@ using UnityEngine.Networking;
 
 namespace Suggest
 {
+    /// <summary>
+    /// 正規表現で情報を抽出するコンポーネント.
+    /// Github Actionsでやるため、おそらく不要
+    /// </summary>
     public class TimeTableCreater : MonoBehaviour
     {
         public List<int>[][][] timeTable;

@@ -23,6 +23,13 @@ namespace Suggest
             }
         }
 
+        /// <summary>
+        /// シリアライズされたXMLをロードする
+        /// </summary>
+        /// <param name="xmlPath">XMLがあるパス</param>
+        /// <param name="callback"><para>結果を受け取るコールバック.</para><para> (result)=>「変数」=result</para></param>
+        /// <typeparam name="T">結果の型</typeparam>
+        /// <returns></returns>
         public static IEnumerator Import<T>(string xmlPath, UnityAction<T> callback)
         {
             T result;

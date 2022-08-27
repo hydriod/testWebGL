@@ -25,7 +25,11 @@ namespace Suggest
         /// 推奨の時間割
         /// </summary>
         public HashSet<int>[] recommendTimeTable;
-        public Dictionary<int, Subject> Subjects { get; set; }
+        /// <summary>
+        /// <para>シラバスの情報</para>
+        /// <para>phpファイルの番号がキー</para>
+        /// </summary>
+        public Dictionary<int, Subject> Syllabus { get; set; }
 
 
         private void Awake()
@@ -54,8 +58,8 @@ namespace Suggest
 
         public void printTimeTable()
         {
-            //TimeTablePrinter.printTimeTable(new List<int>[][][] { recommendTimeTable }, "recommendTimeTable", Subjects);
-            TimeTablePrinter.printTimeTable(timeTable, "timeTable", Subjects);
+            //TimeTablePrinter.printTimeTable(new List<int>[][][] { recommendTimeTable }, "recommendTimeTable", Syllabus);
+            TimeTablePrinter.printTimeTable(timeTable, "timeTable", Syllabus);
         }
 
         public IEnumerator LoadXml()
@@ -63,7 +67,7 @@ namespace Suggest
             yield return StartCoroutine(
                 TimeTableExporter.Import<Dictionary<int, Subject>>(
                     Application.streamingAssetsPath + "/xml/Syllabus.xml",
-                    (result) => Subjects = result
+                    (result) => Syllabus = result
                 )
             );
             yield return StartCoroutine(
@@ -89,9 +93,9 @@ namespace Suggest
                     foreach (int id in timeTable[half][day][j])
                     {
                         // 学年一致
-                        if (Subjects[id].grade == grade)
+                        if (Syllabus[id].grade == grade)
                         {
-                            foreach (string element in Subjects[id].department)
+                            foreach (string element in Syllabus[id].department)
                             {
                                 //Debug.Log($"{element} in {department}");
                                 // 対象科目なら追加
@@ -101,7 +105,7 @@ namespace Suggest
                                     if(is_empty[day, j])
                                     {
                                         suggestTimeTable[day].Add(id);
-                                        for(int i=Subjects[id].startTime;i<=Subjects[id].endTime;i++)
+                                        for(int i=Syllabus[id].startTime;i<=Syllabus[id].endTime;i++)
                                         {
                                             is_empty[day, i] = false;
                                         }
@@ -120,6 +124,7 @@ namespace Suggest
             printTimeTable();
         }
 
+        // 以下UIイベント用
         public void ChangedDepartmentDropdown(TMP_Dropdown dropdown)
         {
             department = dropdown.options[dropdown.value].text;

@@ -61,8 +61,8 @@ namespace Suggest
         {
             StringBuilder stringBuilder = new StringBuilder();
 
-            stringBuilder.Append(suggest.Subjects[id].name);
-            stringBuilder.Append(" (").Append(suggest.Subjects[id].timeTableId).Append(")");
+            stringBuilder.Append(suggest.Syllabus[id].name);
+            stringBuilder.Append(" (").Append(suggest.Syllabus[id].timeTableId).Append(")");
 
             return new TMP_Dropdown.OptionData(stringBuilder.ToString());
         }
