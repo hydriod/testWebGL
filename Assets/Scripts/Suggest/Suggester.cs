@@ -5,7 +5,7 @@ using TMPro;
 
 namespace Suggest
 {
-    public class Suggest : MonoBehaviour
+    public class Suggester : MonoBehaviour
     {
         /// <summary>
         /// <para>提案する前期後期,クオーター</para>
