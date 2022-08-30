@@ -1,0 +1,28 @@
+<ArrayOfKeyValueOfintmy_class0bImIOrq
+     xmlns="http://schemas.microsoft.com/2003/10/Serialization/Arrays"
+     xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+    <KeyValueOfintmy_class0bImIOrq>
+        <Key>15</Key>
+        <Value
+             xmlns:a="http://schemas.datacontract.org/2004/07/test">
+            <a:department>
+                <string>d1</string>
+                <string>d2</string>
+            </a:department>
+            <a:id>15</a:id>
+            <a:name>a</a:name>
+        </Value>
+    </KeyValueOfintmy_class0bImIOrq>
+    <KeyValueOfintmy_class0bImIOrq>
+        <Key>11</Key>
+        <Value
+             xmlns:a="http://schemas.datacontract.org/2004/07/test">
+            <a:department>
+                <string>d1</string>
+                <string>d3</string>
+            </a:department>
+            <a:id>11</a:id>
+            <a:name>cc</a:name>
+        </Value>
+    </KeyValueOfintmy_class0bImIOrq>
+</ArrayOfKeyValueOfintmy_class0bImIOrq>
