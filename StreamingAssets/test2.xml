@@ -1,0 +1,1 @@
+<my_class xmlns="http://schemas.datacontract.org/2004/07/test" xmlns:i="http://www.w3.org/2001/XMLSchema-instance"><department xmlns:a="http://schemas.microsoft.com/2003/10/Serialization/Arrays"><a:string>aaa2</a:string><a:string>ab</a:string></department><id>123</id><name>tests</name></my_class>
