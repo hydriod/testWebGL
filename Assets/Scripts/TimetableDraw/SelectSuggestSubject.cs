@@ -9,12 +9,14 @@ namespace TimetableDraw
     public class SelectSuggestSubject : MonoBehaviour
     {
         public Canvas canvas;
+        public DrawTimeTable drawTimeTable;
         Subject lecture;
+        [Header("SerializeField")]
         [SerializeField] TMP_Text timetableId;
         [SerializeField] TMP_Text subjectName;
         [SerializeField] TMP_Text timetableDay;
         [SerializeField] TMP_Text timetable;
-
+        [Header("デバッグ用")]
         [SerializeField] int startTime;
         [SerializeField] int endTime;
 
@@ -72,14 +74,14 @@ namespace TimetableDraw
         {
             set
             {
-                EndTime = value;
+                endTime = value;
                 timetable.text = $"{startTime}-{endTime}限";
             }
         }
 
         public void Add()
         {
-
+            drawTimeTable.AddSubjectToTimetable(Lecture);
         }
         public void CanvasDisable()
         {

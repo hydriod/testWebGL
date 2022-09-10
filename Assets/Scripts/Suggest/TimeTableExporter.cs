@@ -3,7 +3,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using UnityEngine.Networking;
 using UnityEngine.Events;
-
+using System.Xml;
 namespace Suggest
 {
     public static class TimeTableExporter
@@ -33,7 +33,7 @@ namespace Suggest
         public static IEnumerator Import<T>(string xmlPath, UnityAction<T> callback)
         {
             T result;
-            
+
 #if UNITY_EDITOR
 #else
             UnityWebRequest request = new UnityWebRequest(xmlPath);
@@ -49,6 +49,47 @@ namespace Suggest
 
             callback(result);
 
+            yield break;
+        }
+
+        public static IEnumerator Import<T>(string xmlPath, UnityAction<T> callback, TMPro.TMP_Text text)
+        {
+            T result;
+
+            text.text = $"{xmlPath}\n1";
+            yield return null;
+
+#if UNITY_EDITOR
+#else
+            UnityWebRequest request = new UnityWebRequest(xmlPath);
+
+            request.downloadHandler = new DownloadHandlerFile(xmlPath); 
+            yield return request.SendWebRequest();
+#endif
+            text.text += "2";
+            yield return null;
+
+            using (var stream = new FileStream(xmlPath, FileMode.Open))
+            {
+                using (var reader = XmlReader.Create(stream))
+                {
+                    DataContractSerializer deserializer = new DataContractSerializer(typeof(T));
+
+                    result = default;
+                    try
+                    {
+                        result = (T)deserializer.ReadObject(reader);
+                    }
+                    catch (System.Exception e)
+                    {
+                        text.text += "System.Exception\n" + e.ToString();
+                    }
+                }
+
+            }
+
+            callback(result);
+            text.text += "***";
             yield break;
         }
     }

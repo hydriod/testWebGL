@@ -95,6 +95,27 @@ namespace Suggest
             Debug.Log("Load end");
         }
 
+        public void debug(TMP_Text text)
+        {
+            StartCoroutine(
+                TimeTableExporter.Import<Dictionary<int, Subject>>(
+                    Application.streamingAssetsPath + "/xml/Syllabus.xml",
+                    (result) => syllabus = result,
+                    text
+                )
+            );
+        }
+        public void debug2(TMP_Text text)
+        {
+            StartCoroutine(
+                TimeTableExporter.Import<List<int>[][][]>(
+                    Application.streamingAssetsPath + "/xml/TimeTable.xml",
+                    (result) => timeTable = result,
+                    text
+                )
+            );
+        }
+
         public void CreateSuggest(int half, string department, int grade)
         {
             // 空きコマか

@@ -59,4 +59,4 @@ crashlytics-build.properties
 
 
 /Assets/StreamingAssets/download
-/Assets/StreamingAssets/xml
+#/Assets/StreamingAssets/xml

@@ -2,6 +2,10 @@ name: Build-Deploy
 
 on:
   workflow_dispatch:
+  push:
+    branchs:
+      - main
+      - 'deploy'
 
 jobs:
   build:
