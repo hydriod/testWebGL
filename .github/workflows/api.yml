@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-        curl \
-        -H "Accept: application/vnd.github+json" \ 
-        -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-        https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/secrets/public-key
+          curl \
+          -H "Accept: application/vnd.github+json" \ 
+          -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/secrets/public-key
