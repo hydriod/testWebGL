@@ -9,7 +9,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: |
+          echo "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/secrets/public-key"
           curl \
           -H "Accept: application/vnd.github+json" \ 
           -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-          https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/secrets/public-key
+          "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/secrets/public-key"
